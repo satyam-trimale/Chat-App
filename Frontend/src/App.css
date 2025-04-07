@@ -1,0 +1,8 @@
+.App {
+    min-height: 100vh;
+    display: flex;
+    background-image: url("/pexels-designerd-997376941-31418369.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
