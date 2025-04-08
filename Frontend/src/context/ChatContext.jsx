@@ -57,8 +57,10 @@ export const ChatProvider = ({ children }) => {
             const { data } = await axios.post(`http://localhost:5000/api/messages/send/${chatId}`, {
                 text: content
             });
-            setMessages([...messages, data]);
-            socket.emit('newMessage', data);
+            setMessages(prevMessages => [...prevMessages, data]);
+            if (socket) {
+                socket.emit('newMessage', data);
+            }
         } catch (error) {
             console.error('Error sending message:', error);
             if (error.response?.status === 401) {
@@ -71,12 +73,24 @@ export const ChatProvider = ({ children }) => {
     useEffect(() => {
         if (socket) {
             socket.on('newMessage', (newMessage) => {
-                if (selectedChat && (selectedChat._id === newMessage.senderId || selectedChat._id === newMessage.receiverId)) {
-                    setMessages([...messages, newMessage]);
-                }
+                // Only update messages if we're in the correct chat
+                setMessages(prevMessages => {
+                    // Check if this message belongs to the current chat
+                    if (selectedChat && 
+                        (selectedChat._id === newMessage.senderId || 
+                         selectedChat._id === newMessage.receiverId)) {
+                        return [...prevMessages, newMessage];
+                    }
+                    return prevMessages;
+                });
             });
+
+            // Cleanup
+            return () => {
+                socket.off('newMessage');
+            };
         }
-    }, [socket, selectedChat, messages]);
+    }, [socket, selectedChat]);
 
     return (
         <ChatContext.Provider

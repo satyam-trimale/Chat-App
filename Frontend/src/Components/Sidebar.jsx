@@ -3,7 +3,7 @@ import { useChat } from '../context/ChatContext';
 import { useSocket } from '../context/SocketContext';
 
 function Sidebar() {
-    const { users, selectedChat, setSelectedChat, fetchChats } = useChat();
+    const { users, selectedChat, setSelectedChat, fetchChats, setUsers } = useChat();
     const { socket } = useSocket();
 
     useEffect(() => {
@@ -12,17 +12,23 @@ function Sidebar() {
 
     useEffect(() => {
         if (socket) {
+            // Listen for online users updates
             socket.on('getOnlineUsers', (onlineUsers) => {
                 // Update online status of users
-                const updatedUsers = users.map(user => ({
-                    ...user,
-                    isOnline: onlineUsers.includes(user._id)
-                }));
-                // Update users state
-                // Note: You'll need to add a setUsers function to your ChatContext
+                setUsers(prevUsers => 
+                    prevUsers.map(user => ({
+                        ...user,
+                        isOnline: onlineUsers.includes(user._id)
+                    }))
+                );
             });
+
+            // Clean up the event listener when the component unmounts
+            return () => {
+                socket.off('getOnlineUsers');
+            };
         }
-    }, [socket, users]);
+    }, [socket, setUsers]);
 
     return (
         <div className="w-1/4 bg-gray-100 h-full overflow-y-auto">
@@ -52,6 +58,9 @@ function Sidebar() {
                             <div className="ml-3">
                                 <p className="font-medium">{user.name}</p>
                                 <p className="text-sm text-gray-500">{user.email}</p>
+                                {user.isOnline && (
+                                    <p className="text-xs text-green-600">Online</p>
+                                )}
                             </div>
                         </div>
                     ))}

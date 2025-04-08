@@ -7,11 +7,23 @@ import ChatBox from '../Components/ChatBox';
 
 function Chat() {
     const navigate = useNavigate();
-    const { socket } = useSocket();
+    const { socket, connectSocket } = useSocket();
+
+    // Check if user is logged in
+    useEffect(() => {
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        if (!userInfo) {
+            navigate('/login');
+            return;
+        }
+
+        // Connect socket if not already connected
+        if (!socket && userInfo._id) {
+            connectSocket(userInfo._id);
+        }
+    }, [navigate, socket, connectSocket]);
 
     const handleLogout = () => {
-        // The socket will automatically disconnect when the component unmounts
-        // due to the cleanup in SocketContext
         localStorage.removeItem('userInfo');
         toast.success('Logged out successfully');
         navigate('/login');
