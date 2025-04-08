@@ -4,15 +4,14 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-
+import { useSocket } from "../context/SocketContext";
 
 function Login() {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
+  const { connectSocket } = useSocket();
 
   const handleClick = () => setShow(!show);
 
@@ -38,6 +37,13 @@ function Login() {
   
       console.log("Login successful:", data);
       toast.success("Login Successful");
+      
+      // Store user data in localStorage
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      
+      // Connect socket after successful login
+      connectSocket(data._id);
+      
       navigate("/chats"); 
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
