@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./db/index");
 const userRoutes = require("./routes/userRoutes")
+const chatRoutes = require("./routes/chatRoutes")
 dotenv.config();
 connectDB();
 app.use(cors());
@@ -21,6 +22,7 @@ app.get("/api/chat/:id", (req, res) => {
   res.send(singleChat);
 });
 app.use("/api/user",userRoutes)
+app.use("/api/chat",chatRoutes)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, console.log(`Server started on port ${PORT} `));
