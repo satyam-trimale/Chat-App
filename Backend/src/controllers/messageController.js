@@ -39,15 +39,12 @@ const sendMessage = asyncHandler(async(req,res) => {
         const { id: receiverId } = req.params
         const senderId = req.user._id
 
-        const imageLocalPath = req.files?.image[0]?.path
-
-        const image = await uploadOnCloudinary(imageLocalPath)
+        
 
         const newMessage = new Message({
             senderId,
             receiverId,
             text,
-            image: image?.url || ""
         })
 
         await newMessage.save()
