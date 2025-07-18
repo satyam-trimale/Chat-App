@@ -24,6 +24,9 @@ function Chat() {
     }, [navigate, socket, connectSocket]);
 
     const handleLogout = () => {
+        if(socket){
+            socket.disconnect();
+        }
         localStorage.removeItem('userInfo');
         toast.success('Logged out successfully');
         navigate('/login');
