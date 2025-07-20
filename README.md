@@ -1,31 +1,47 @@
+# 🔒 Chat-App
 
-# Chat-App
+A modern, real-time chat application with **end-to-end encryption** (E2EE), built using React, Node.js, Express, Socket.IO, and MongoDB. This project demonstrates secure, scalable, and privacy-focused messaging for learning and production use.
 
-A real-time chat application built using Node.js and npm packages. This project demonstrates how to create a robust, scalable chat platform suitable for learning and production use.
+---
 
-## Features
+## 🚀 Features
 
-- Real-time messaging between users
-- User authentication using JWT
-- Responsive UI 
-- Scalable backend with Node.js
+- **End-to-End Encrypted Messaging:** All messages are encrypted on the client and can only be decrypted by the intended recipient.
+- **User Authentication:** Secure registration and login with JWT.
+- **Real-Time Communication:** Instant messaging using Socket.IO.
+- **Modern UI:** Responsive, user-friendly interface built with React and Tailwind CSS.
+- **Profile Avatars:** Upload and display user profile pictures.
+- **Online Status:** See which users are online in real time.
+- **Scalable Backend:** Built with Node.js, Express, and MongoDB.
 
-## Technologies Used
+---
 
-- **Backend:** Node.js (with Express.js)
-- **Package Manager:** npm
-- **WebSockets:** Socket.IO
-- **Database:** MongoDB
-- **Frontend:** React.js
+## 🛡️ End-to-End Encryption Details
+
+- **Key Generation:** Each user generates a public/private key pair on signup. The private key is encrypted with the user's password and stored securely.
+- **Message Encryption:** Messages are encrypted with a shared secret derived from the sender's private key and the recipient's public key (ECDH + AES-GCM).
+- **Zero Knowledge:** The server never sees plaintext messages or unencrypted private keys.
+- **Forward Secrecy:** Each user pair has a unique shared secret.
+
+---
+
+## 🛠️ Technologies Used
+
+- **Frontend:** React, Vite, Tailwind CSS, React Router, React Toastify
+- **Backend:** Node.js, Express.js, Socket.IO, MongoDB, Mongoose
 - **Authentication:** JWT
+- **Crypto:** ECDH (secp256k1), AES-GCM (WebCrypto API)
+- **File Uploads:** Multer, Cloudinary
 
-## Getting Started
+---
+
+## ⚡ Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or newer recommended)
+- Node.js (v14+ recommended)
 - npm
-- (Database server, e.g. MongoDB)
+- MongoDB (local or cloud)
 
 ### Installation
 
@@ -37,43 +53,50 @@ A real-time chat application built using Node.js and npm packages. This project 
 
 2. **Install dependencies:**
    ```bash
+   cd Backend
    npm install
-   # or, if separate backend/frontend folders:
-   cd Backend && npm install
-   cd ../Frontend && npm install
+   cd ../Frontend
+   npm install
    ```
 
 3. **Configure environment variables:**
-   - Create a `.env` file in the appropriate directory (root/Backend)
-   - Example:
+   - Create a `.env` file in `Backend/`:
      ```
      PORT=5000
      MONGO_URI=mongodb://localhost:27017/chat-app
      JWT_SECRET=your_jwt_secret
+     CLOUDINARY_CLOUD_NAME=your_cloud_name
+     CLOUDINARY_API_KEY=your_api_key
+     CLOUDINARY_API_SECRET=your_api_secret
      ```
 
 4. **Start the application:**
-   - Backend:
+   - **Backend:**
      ```bash
      cd Backend
      npm start
      ```
-   - Frontend (if applicable):
+   - **Frontend:**
      ```bash
      cd ../Frontend
-     npm start
+     npm run dev
      ```
 
-5. **Visit the app:**
-   - Open your browser and go to `http://localhost:3000` (or the configured port)
+5. **Open the app:**
+   - Visit [http://localhost:5173](http://localhost:5173) in your browser.
 
-## Usage
+---
 
-- Register or log in
-- Start a new chat 
-- Send and receive messages in real-time
+## 📝 Usage
 
-## Contributing
+- **Sign Up:** Create a new account with a profile picture.
+- **Log In:** Securely log in with your credentials.
+- **Start Chatting:** Select a user and start sending encrypted messages in real time.
+- **Log Out:** Securely end your session.
+
+---
+
+## 🤝 Contributing
 
 1. Fork this repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -81,8 +104,20 @@ A real-time chat application built using Node.js and npm packages. This project 
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a pull request
 
+---
+
+## ⚠️ Security Notes
+
+- **Private Key Security:** Your private key is encrypted with your password and never leaves your device unencrypted.
+- **Password Reset:** If you forget your password, you will lose access to your encrypted messages.
+- **Public Key Authenticity:** For maximum security, verify public keys out-of-band if possible.
 
 
-## Contact
+## 👤 Author
 
 Created by [satyam-trimale](https://github.com/satyam-trimale) — feel free to reach out!
+
+---
+
+**Tip:**  
+For production, always use HTTPS and secure your environment variables.
