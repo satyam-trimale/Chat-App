@@ -16,7 +16,7 @@ A modern, real-time chat application with **end-to-end encryption** (E2EE), buil
 
 ## 🛡️ Security Architecture: End-to-End Encryption (E2EE)
 
-This project's primary focus is on user privacy. Unlike standard chat applications where the server can read message content, WhisperWave ensures that only the sender and the intended recipient can decipher messages.
+This project's primary focus is on user privacy. Unlike standard chat applications where the server can read message content, This chat-app ensures that only the sender and the intended recipient can decipher messages.
 
 Here’s a high-level overview of the cryptographic protocol:
 
