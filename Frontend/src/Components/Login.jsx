@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSocket } from "../context/SocketContext";
+import { decryptPrivateKey } from "../utils/crypto";
 
 function Login() {
   const [show, setShow] = useState(false);
@@ -34,13 +35,24 @@ function Login() {
           },
         }
       );
-  
-      console.log("Login successful:", data);
+      // --- 1. DECRYPT THE PRIVATE KEY ---
+      // The 'data' object from the server now contains the encrypted key parts
+      const privateKey = await decryptPrivateKey(data, password);      
+
+      // --- 2. STORE THE PLAINTEXT PRIVATE KEY FOR THE CURRENT SESSION ---
+      localStorage.setItem(`privateKey_${data._id}`, privateKey);
       toast.success("Login Successful");
+
+      // Store user data (but clear the sensitive key parts first for safety)
+      const userInfoToStore = { ...data };
+      delete userInfoToStore.encryptedPrivateKey;
+      delete userInfoToStore.privateKeySalt;
+      delete userInfoToStore.privateKeyIv;
+      localStorage.setItem('userInfo', JSON.stringify(userInfoToStore));
+
       
-      // Store user data in localStorage
-      localStorage.setItem('userInfo', JSON.stringify(data));
       
+
       // Connect socket after successful login
       connectSocket(data._id);
       

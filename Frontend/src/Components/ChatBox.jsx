@@ -35,7 +35,7 @@ function ChatBox() {
             </div>
         );
     }
-
+    // console.log(messages)
     return (
         <div className="flex-1 flex flex-col bg-white">
             <div className="p-4 border-b">
@@ -67,7 +67,7 @@ function ChatBox() {
                                     : 'bg-blue-500 text-white'
                             }`}
                         >
-                            {message.text}
+                            {message.message}
                             {message.image && (
                                 <img
                                     src={message.image}
