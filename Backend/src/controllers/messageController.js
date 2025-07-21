@@ -35,7 +35,7 @@ const getMessages = asyncHandler(async(req,res) => {
 })
 const sendMessage = asyncHandler(async(req,res) => {
     try {
-        const { text } = req.body
+        const { message } = req.body
         const { id: receiverId } = req.params
         const senderId = req.user._id
 
@@ -44,7 +44,7 @@ const sendMessage = asyncHandler(async(req,res) => {
         const newMessage = new Message({
             senderId,
             receiverId,
-            text,
+            message,
         })
 
         await newMessage.save()

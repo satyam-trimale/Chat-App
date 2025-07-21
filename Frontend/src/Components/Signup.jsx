@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { encryptPrivateKey, generateKeys } from "../utils/crypto";
 
 function Signup() {
   const [show, setShow] = useState(false);
@@ -35,12 +36,22 @@ function Signup() {
     }
   
     try {
+
+      const {privateKey, publicKey} = generateKeys();
+      // --- 2. ENCRYPT THE PRIVATE KEY WITH THE PASSWORD ---
+      const {encryptedPrivateKey, salt, iv} = await encryptPrivateKey(privateKey,password);
+
       setPicLoading(true);
       const formData = new FormData();
       formData.append("name", name);
       formData.append("email", email);
       formData.append("password", password);
       formData.append("pic", pic); // Must match backend field name
+      formData.append("publicKey",publicKey);
+      formData.append("encryptedPrivateKey",encryptedPrivateKey);
+      formData.append("privateKeySalt",salt);
+      formData.append("privateKeyIv",iv);
+
   
       const { data } = await axios.post(
         "http://localhost:5000/api/user/register",
@@ -51,6 +62,8 @@ function Signup() {
           },
         }
       );
+        // --- 4. STORE THE PLAINTEXT PRIVATE KEY FOR THE CURRENT SESSION ---
+      localStorage.setItem(`privateKey_${data._id}`, privateKey);      
   
       toast.success("Registration suceessfull")
       setPicLoading(false);
