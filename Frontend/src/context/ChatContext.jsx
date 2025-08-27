@@ -119,9 +119,9 @@ export const ChatProvider = ({ children }) => {
                 message: content  // Replace encrypted text with plaintext for local UI
             };            
             setMessages(prevMessages => [...prevMessages, messageForSender]);
-            if (socket) {
-                socket.emit('newMessage', data);
-            }
+            // if (socket) {
+            //     socket.emit('newMessage', data);
+            // }
         } catch (error) {
             console.error('Error sending message:', error);
             if (error.response?.status === 401) {
